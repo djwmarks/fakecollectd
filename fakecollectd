@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+from argparse import ArgumentParser
+
+import collectd
+import imp
+import json
+import os
+import re
+
+parser = ArgumentParser(description="Fakecollectd")
+parser.add_argument("--plugin-config", help="path to Python plugin configuration (.json)")
+parser.add_argument("plugin", help="path to Python plugin")
+args = parser.parse_args()
+
+if args.plugin_config:
+	conf_json = json.loads(open(args.plugin_config).read())
+
+def module_name_from_path(path):
+	return re.search("(?P<mod_name>[^\/]+).py$", args.plugin).group("mod_name")
+
+mod_name = module_name_from_path(args.plugin)
+mod_tuple = imp.find_module(mod_name, [os.path.dirname(args.plugin)])
+plugin_module = imp.load_module(mod_name, *mod_tuple)
+
+collectd.main_app(conf_json)

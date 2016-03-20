@@ -1,0 +1,16 @@
+{
+  "key": "Module",
+  "values": ["random_int"],
+  "children": [
+    {
+      "key": "Minimum",
+      "values": [1],
+      "children": []
+    },
+    {
+      "key": "Maximum",
+      "values": [100],
+      "children": []
+    }
+  ]
+}
